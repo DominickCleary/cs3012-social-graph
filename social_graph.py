@@ -2,32 +2,50 @@ import matplotlib.pyplot as plt
 import numpy as np
 from github import Github   # PyGithub: https://github.com/PyGithub/PyGithub
 
-print("Hi, Welcome to Yet Another GitHub Analytics Program!\n\nHow would you like to sign in?\n\n1 = Username & Password\n2 = Token\n")
+def getLanguageDetails(user):
+    languageDict = dict()
 
-while (True):
-    choice = int(input("Enter your choice: "))
-    if (choice == 1):
-        g = Github(input("Username: "), input("Password: "))
-        break
-    elif (choice == 2):
-        print("You can get the token from the developer settings in GitHub")
-        g = Github(str(input("Token: ")))
-        break
-    else:
-        print("Invalid, choose 1 or 2")
-        
+    for repo in user.get_repos():
+        language = repo.language
+        if language in languageDict:
+            languageDict[language] = languageDict[language] + 1
+        else:
+            languageDict[language] = 1
+
+    return languageDict
+
+def getAvgLanguageDetails(dictList):
+    
+
+def pieChart(values, labels, title):
+    fig1, ax1 = plt.subplots()
+    ax1.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.title(title)
+    plt.show()
+# print("Hi, Welcome to Yet Another GitHub Analytics Program!\n\nHow would you like to sign in?\n\n1 = Username & Password\n2 = Token\n")
+
+# Login prompts
+# while (True):
+#     choice = int(input("Enter your choice: "))
+#     if (choice == 1):
+#         g = Github(input("Username: "), input("Password: "))
+#         break
+#     elif (choice == 2):
+#         print("You can get the token from the developer settings in GitHub")
+#         g = Github(str(input("Token: ")))
+#         break
+#     else:
+#         print("Invalid, choose 1 or 2")
+
+
+g = Github("dominickcleary@gmail.com", "q2,)=|w?4'Qq&x")
+
 # Login
 user = g.get_user()
 
-print("Details of " + user.name + "'s repositories\n")
-
-for repo in user.get_repos():
-    print("Name: " + repo.name)
-    print("URL: " + repo.html_url)
-    print("Language: " + str(repo.language))
-    print("Stars: " + str(repo.stargazers_count))
-    print("Private: " + str(repo.private) + "\n")
-
+# dict = getLanguageDetails(user)
+# pieChart(dict.values(), dict, user.name + "'s language stats")
 # print("\n\n" + user.name + " has " + str(user.followers) + " followers\n")
 
 # for follower in user.get_followers():
