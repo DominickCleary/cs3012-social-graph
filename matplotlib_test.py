@@ -1,18 +1,23 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import mplcursors
+import matplotlib.pyplot as plt
+from matplotlib.widgets import TextBox
 
-ages = [22, 67, 34, 144, 155, 5, 1, 57, 123, 67, 123, 12, 645, 12]
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.2)
+t = np.arange(-2.0, 2.0, 0.001)
+s = 0
+initial_text = "t ** 2"
+l, = plt.plot(t, s, lw=2)
 
-ids = [x for x in range(len(ages))]
 
-plt.bar(ids, ages)
+def submit(text):
+    ydata = eval(text)
+    l.set_ydata(ydata)
+    ax.set_ylim(np.min(ydata), np.max(ydata))
+    plt.draw()
 
-plt.xlabel('Plot Number')
-plt.ylabel('Important var')
-plt.title('Other name')
-plt.legend()
-
-mplcursors.cursor(highlight=True, hover=True)
+axbox = plt.axes([0.1, 0.05, 0.8, 0.075])
+text_box = TextBox(axbox, 'Evaluate', initial=initial_text)
+text_box.on_submit(submit)
 
 plt.show()
