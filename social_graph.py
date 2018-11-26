@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from random import randint
 from github import Github   # PyGithub: https://github.com/PyGithub/PyGithub
 
 # Returns a dictionary containing the language used and amount of repos that use them
@@ -45,6 +46,18 @@ def pieChart(values1, labels1, values2, labels2, title1, title2):
 
     plt.show()
 
+# Creates a bar chart
+def barChartH(x, y, xlabel, ylabel, title):
+    y_pos = np.arange(len(y))
+
+    plt.barh(y_pos, list(x), align='center')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.yticks(y_pos, y)
+    plt.title(title)
+    
+    plt.show()
+
 # Compares the logged in users language stats to those they follow
 def compareLanguageUse(user):
     dictList = []
@@ -55,6 +68,18 @@ def compareLanguageUse(user):
     avgDict = getAvgLanguageDetails(dictList)
     userDict = getLanguageDetails(user)
     pieChart(userDict.values(), userDict, avgDict.values(), avgDict, user.name + "'s Language Use", "Followers Average Language Use")
+
+# Compares the amount of commits between all the users repos
+def compareCommitsPerRepo(user):
+    repoInfo = dict()
+    for repo in user.get_repos():
+        count = 0
+        for commit in repo.get_commits():
+            count += 1
+        repoInfo[repo.name] = count
+    barChartH(repoInfo.values(), repoInfo, "Commits", "Repos", "Amount of Commits per Repo")
+
+
     
 # print("Hi, Welcome to Yet Another GitHub Analytics Program!\n\nHow would you like to sign in?\n\n1 = Username & Password\n2 = Token\n")
 
@@ -72,23 +97,10 @@ def compareLanguageUse(user):
 #         print("Invalid, choose 1 or 2")
 
 
-g = Github("dominickcleary@gmail.com", "q2,)=|w?4'Qq&x")
+g = Github("860f00f494ad2a882e4a9ed1a7f55f9598bd9add")
 
 # Login
 user = g.get_user()
-compareLanguageUse(user)
-# dict = getLanguageDetails(user)
-# pieChart(dict.values(), dict, user.name + "'s language stats")
-# print("\n\n" + user.name + " has " + str(user.followers) + " followers\n")
+# compareLanguageUse(user)
+compareCommitsPerRepo(user)
 
-# for follower in user.get_followers():
-#     print("Name: " + follower.name)
-#     print("URL: " + follower.html_url)
-#     print("Public Repos: " + str(follower.public_repos) + "\n")
-
-# print("\n\nAnd follows " + str(user.following) + " users\n")
-
-# for followe in user.get_following():
-#     print("Name: " + followe.name)
-#     print("URL: " + followe.html_url)
-#     print("Public Repos: " + str(followe.public_repos) + "\n")
